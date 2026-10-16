@@ -1,0 +1,432 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   VOYANTA DESIGN TOKENS
+   Dizayn dili: Plus Jakarta Sans, yumşaq mavi (#5B8DEF), nanə yarpağı (#3DBE7A),
+   günəş sarısı (#F2C230), kərpi (#1D1E22) və boz kənari (#F9FAFB) fonu.
+   ========================================================================== */
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+
+  /* Marka — mavi */
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #dbe7ff;
+  --color-brand-200: #bed3ff;
+  --color-brand-300: #90b0fb;
+  --color-brand-400: #6f96f6;
+  --color-brand-500: #5b8def;
+  --color-brand-600: #4a7ce0;
+  --color-brand-700: #396bd0;
+  --color-brand-800: #2a53a6;
+  --color-brand-900: #23437f;
+
+  /* Müşahidə — nanə yarpağı */
+  --color-mint-50: #ecfbf3;
+  --color-mint-100: #d2f5e2;
+  --color-mint-200: #a6eac7;
+  --color-mint-300: #6fd9a5;
+  --color-mint-400: #4bcf8c;
+  --color-mint-500: #3dbe7a;
+  --color-mint-600: #2aa365;
+  --color-mint-700: #1f8250;
+
+  /* Detallar — günəş sarısı */
+  --color-sun-50: #fef9e7;
+  --color-sun-100: #fdf0c4;
+  --color-sun-200: #fae089;
+  --color-sun-300: #f7cd4f;
+  --color-sun-400: #f5c73f;
+  --color-sun-500: #f2c230;
+  --color-sun-600: #d9a516;
+  --color-sun-700: #a87c0f;
+
+  /* Tənzimləyicilər */
+  --color-ink-300: #b6b9c0;
+  --color-ink-400: #9298a3;
+  --color-ink-500: #6b7280;
+  --color-ink-600: #545a65;
+  --color-ink-700: #3f4147;
+  --color-ink-800: #2b2d33;
+  --color-ink-900: #1d1e22;
+  --color-canvas: #f9fafb;
+
+  /* Kölgələr */
+  --shadow-soft: 0 1px 2px rgba(16, 24, 40, 0.04), 0 8px 24px -10px rgba(16, 24, 40, 0.12);
+  --shadow-lift: 0 2px 4px rgba(16, 24, 40, 0.04), 0 20px 44px -16px rgba(16, 24, 40, 0.22);
+  --shadow-card: 0 1px 2px rgba(16, 24, 40, 0.05), 0 14px 34px -18px rgba(91, 141, 239, 0.45);
+  --shadow-glow: 0 18px 40px -18px rgba(91, 141, 239, 0.65);
+
+  /* Radius */
+  --radius-4xl: 2rem;
+  --radius-5xl: 2.5rem;
+
+  /* Animasiya sürətləri */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  --animate-voy-float: voy-float 7s ease-in-out infinite;
+  --animate-voy-float-slow: voy-float 11s ease-in-out infinite;
+  --animate-voy-drift: voy-drift 18s ease-in-out infinite alternate;
+  --animate-voy-shimmer: voy-shimmer 2.2s linear infinite;
+  --animate-voy-orbit: voy-orbit 9s linear infinite;
+  --animate-voy-pulse-ring: voy-pulse-ring 2.6s ease-out infinite;
+  --animate-voy-fade-up: voy-fade-up 0.6s var(--ease-out-expo) both;
+  --animate-voy-pop: voy-pop 0.5s var(--ease-spring) both;
+  --animate-voy-blink: voy-blink 1.15s ease-in-out infinite;
+  --animate-voy-gradient: voy-gradient 9s ease infinite;
+  --animate-voy-rise: voy-rise 0.9s var(--ease-out-expo) both;
+  --animate-voy-spin-slow: voy-spin 14s linear infinite;
+}
+
+/* ==========================================================================
+   KEYFRAMES
+   ========================================================================== */
+@keyframes voy-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes voy-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(0, -18px, 0) scale(1.04);
+  }
+}
+@keyframes voy-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes voy-orbit {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes voy-pulse-ring {
+  0% {
+    transform: scale(0.82);
+    opacity: 0.55;
+  }
+  70% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}
+@keyframes voy-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes voy-rise {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes voy-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes voy-blink {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes voy-gradient {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+@keyframes voy-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   BASE
+   ========================================================================== */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    font-family: var(--font-sans);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-canvas);
+    color: var(--color-ink-900);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background-color: var(--color-brand-200);
+    color: var(--color-ink-900);
+  }
+
+  /* Hamısı üçün eyni fokus halqası */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+    border-radius: 0.5rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  input::placeholder {
+    color: var(--color-ink-400);
+  }
+}
+/* ==========================================================================
+   SCROLL REVEAL
+   IntersectionObserver ilə .voy-reveal → .voy-reveal-in əlavə olunur
+   ========================================================================== */
+.voy-reveal {
+  opacity: 0;
+  transform: translate3d(0, 26px, 0);
+  transition:
+    opacity 0.75s var(--ease-out-expo),
+    transform 0.75s var(--ease-out-expo);
+  transition-delay: var(--voy-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.voy-reveal.voy-reveal-in {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+.voy-reveal-left {
+  transform: translate3d(-28px, 0, 0);
+}
+.voy-reveal-right {
+  transform: translate3d(28px, 0, 0);
+}
+.voy-reveal-zoom {
+  transform: scale(0.94);
+}
+
+/* ==========================================================================
+   3D FLIP CARD (travel postcard)
+   Desktop: hover / focus-within ilə çevrilir.
+   Mobil: data-flipped="true" ilə (tap) çevrilir.
+   ========================================================================== */
+.voy-flip {
+  perspective: 1600px;
+}
+.voy-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.8s var(--ease-out-expo);
+}
+.voy-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+.voy-face-back {
+  transform: rotateY(180deg);
+}
+.voy-flip[data-flipped="true"] .voy-flip-inner,
+.voy-flip:focus-within .voy-flip-inner {
+  transform: rotateY(180deg);
+}
+@media (hover: none) {
+  /* Toxunma cihazlarında hover yoxdur — yalnız tap və fokusla çevrilir */
+  .voy-flip:hover .voy-flip-inner {
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   MÖVSÜM RƏNG TƏNZİMLƏYİCİSİ
+   Şəklin üzərindəki qat + filtr mövsümə uyğun hissi yaradır.
+   ========================================================================== */
+.voy-grade {
+  position: relative;
+}
+.voy-grade > img {
+  transition: filter 0.8s var(--ease-out-expo);
+}
+.voy-grade-spring > img {
+  filter: saturate(1.1) brightness(1.05) contrast(0.97) hue-rotate(-6deg);
+}
+.voy-grade-summer > img {
+  filter: saturate(1.2) brightness(1.06) contrast(1.05);
+}
+.voy-grade-autumn > img {
+  filter: saturate(1.18) brightness(0.99) contrast(1.06) sepia(0.16) hue-rotate(-10deg);
+}
+.voy-grade-winter > img {
+  filter: saturate(0.82) brightness(1.07) contrast(0.98) hue-rotate(8deg);
+}
+.voy-grade-spring::after {
+  background: linear-gradient(150deg, rgba(122, 214, 160, 0.26), rgba(255, 214, 224, 0.16));
+}
+.voy-grade-summer::after {
+  background: linear-gradient(150deg, rgba(255, 206, 106, 0.28), rgba(120, 200, 255, 0.16));
+}
+.voy-grade-autumn::after {
+  background: linear-gradient(150deg, rgba(240, 150, 60, 0.3), rgba(190, 70, 40, 0.18));
+}
+.voy-grade-winter::after {
+  background: linear-gradient(150deg, rgba(150, 195, 240, 0.3), rgba(225, 235, 250, 0.2));
+}
+.voy-grade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  transition: background 0.8s var(--ease-out-expo);
+}
+
+/* ==========================================================================
+   SKELETON
+   ========================================================================== */
+.voy-skeleton {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-slate-100) 20%,
+    var(--color-slate-200) 40%,
+    var(--color-slate-100) 60%
+  );
+  background-size: 200% 100%;
+  animation: voy-shimmer 2.2s linear infinite;
+}
+
+/* ==========================================================================
+   KÖNAR İŞARƏLƏRİ
+   ========================================================================== */
+.voy-scroll-x {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-slate-300) transparent;
+}
+.voy-no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.voy-no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-slate-300);
+  border-radius: 999px;
+  border: 3px solid var(--color-canvas);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-slate-400);
+}
+
+/* Fayl seçimlərinin ox tərzidə görünməsi */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* ==========================================================================
+   HƏRƏKƏT AZALTMA
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .voy-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+

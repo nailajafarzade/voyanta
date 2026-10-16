@@ -1,0 +1,87 @@
+/* SƏNƏ ÖZƏL SƏYAHƏT MARŞRUTU — kinematoqrafik, sakit, redaksiya üslubu. */
+.voy-journey {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(1200px 500px at 15% -10%, rgba(91,141,239,.16), transparent 60%),
+    radial-gradient(900px 480px at 90% 110%, rgba(61,190,122,.12), transparent 60%),
+    linear-gradient(180deg, #14161c 0%, #1d1e22 55%, #191b21 100%);
+}
+.voy-journey-route {
+  position: absolute; left: 0; right: 0; top: 118px; height: 120px;
+  pointer-events: none; opacity: .9;
+}
+.voy-journey-grid {
+  position: relative; display: grid; grid-template-columns: 1fr; gap: 1.25rem;
+}
+.voy-journey-grid.is-leaving .voy-journey-card {
+  opacity: 0; transform: translateX(-22px) scale(.985);
+}
+.voy-journey-card {
+  position: relative; opacity: 1; transform: translateX(0) scale(1);
+  transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1);
+  animation: voy-journey-enter .85s cubic-bezier(.16,1,.3,1) both;
+}
+@keyframes voy-journey-enter {
+  from { opacity: 0; transform: translateX(22px) scale(.985); }
+  to { opacity: 1; transform: translateX(0) scale(1); }
+}
+.voy-journey-frame {
+  position: relative; display: block; width: 100%; height: 430px;
+  overflow: hidden; border-radius: 1.75rem; text-align: left;
+  background: #23252d; cursor: pointer;
+  border: 1px solid rgba(255,255,255,.09);
+  box-shadow: 0 2px 4px rgba(0,0,0,.25), 0 24px 48px -20px rgba(0,0,0,.55);
+}
+.voy-journey-frame:focus-visible { outline: 2px solid #90b0fb; outline-offset: 3px; }
+.voy-journey-frame img {
+  position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover;
+  transform: scale(1.01);
+  transition: transform 1.1s cubic-bezier(.16,1,.3,1), filter .8s ease;
+}
+.voy-journey-frame:hover img, .voy-journey-frame:focus-visible img { transform: scale(1.07); }
+.voy-journey-shade {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,12,18,.12) 0%, rgba(10,12,18,0) 32%, rgba(10,12,18,.38) 62%, rgba(10,12,18,.82) 100%);
+  transition: background .6s ease, opacity .6s ease;
+}
+.voy-journey-frame:hover .voy-journey-shade, .voy-journey-frame:focus-visible .voy-journey-shade {
+  background: linear-gradient(180deg, rgba(10,12,18,.3) 0%, rgba(10,12,18,.35) 38%, rgba(10,12,18,.62) 66%, rgba(10,12,18,.92) 100%);
+}
+.voy-journey-hover { opacity: 0; transform: translateY(10px); transition: opacity .55s cubic-bezier(.16,1,.3,1), transform .55s cubic-bezier(.16,1,.3,1); }
+.voy-journey-frame:hover .voy-journey-hover, .voy-journey-frame:focus-visible .voy-journey-hover, .voy-journey-frame:focus-within .voy-journey-hover { opacity: 1; transform: translateY(0); }
+.voy-journey-default { transition: opacity .45s ease, transform .45s ease; }
+.voy-journey-frame:hover .voy-journey-default, .voy-journey-frame:focus-visible .voy-journey-default { opacity: .35; transform: translateY(-6px); }
+.voy-journey-node { position: absolute; left: 50%; top: -30px; z-index: 2; display: flex; height: 26px; width: 26px; align-items: center; justify-content: center; border-radius: 999px; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.22); backdrop-filter: blur(8px); transform: translateX(-50%); }
+.voy-journey-node::after { content: ""; height: 7px; width: 7px; border-radius: 999px; background: #f2c230; box-shadow: 0 0 0 4px rgba(242,194,48,.18), 0 0 18px rgba(242,194,48,.55); }
+@media (max-width: 639px) {
+  .voy-journey-grid { display: flex; gap: .9rem; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: .5rem; margin-inline: -1rem; padding-inline: 1rem; scrollbar-width: none; }
+  .voy-journey-grid::-webkit-scrollbar { display: none; }
+  .voy-journey-card { flex: 0 0 78%; scroll-snap-align: center; animation: none; }
+  .voy-journey-grid.is-leaving .voy-journey-card { opacity: 1; transform: none; }
+  .voy-journey-frame { height: 440px; }
+  .voy-journey-hover { opacity: 1; transform: none; }
+  .voy-journey-default { display: none; }
+  .voy-journey-node { display: none; }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .voy-journey-grid { grid-template-columns: repeat(2, 1fr); gap: 1.4rem; }
+  .voy-journey-frame { height: 400px; }
+  .voy-journey-card:nth-child(n + 3) { display: none; }
+}
+@media (min-width: 1024px) {
+  .voy-journey-grid { grid-template-columns: repeat(4, 1fr); gap: 1.4rem; align-items: start; padding-top: 44px; }
+  .voy-stop-0 .voy-journey-frame { height: 430px; }
+  .voy-stop-1 .voy-journey-frame { height: 478px; }
+  .voy-stop-2 .voy-journey-frame { height: 404px; }
+  .voy-stop-3 .voy-journey-frame { height: 452px; }
+  .voy-stop-0 { margin-top: 6px; } .voy-stop-1 { margin-top: 38px; } .voy-stop-2 { margin-top: 14px; } .voy-stop-3 { margin-top: 52px; }
+  .voy-journey-card:nth-child(1) { animation-delay: 0ms; transition-delay: 0ms; }
+  .voy-journey-card:nth-child(2) { animation-delay: 70ms; transition-delay: 70ms; }
+  .voy-journey-card:nth-child(3) { animation-delay: 140ms; transition-delay: 140ms; }
+  .voy-journey-card:nth-child(4) { animation-delay: 210ms; transition-delay: 210ms; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .voy-journey-card, .voy-journey-frame img, .voy-journey-hover, .voy-journey-shade { animation: none !important; transition: opacity .2s ease !important; }
+  .voy-journey-grid.is-leaving .voy-journey-card { transform: none; }
+}
+

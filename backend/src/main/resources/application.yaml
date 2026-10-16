@@ -1,0 +1,163 @@
+spring:
+  application:
+    name: voyanta-backend
+
+  profiles:
+    active: dev,local
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/voyanta
+    username: ${DB_USERNAME:voyanta}
+    password: ${DB_PASSWORD:voyanta}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate        # schema Flyway ilə idarə olunur, Hibernate yalnız yoxlayır
+    open-in-view: false          # lazy-loading tələlərinin qarşısını alır
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 2000ms
+
+  jackson:
+    default-property-inclusion: non_null
+    deserialization:
+      fail-on-unknown-properties: false
+
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+# --- Bizim öz konfiqurasiya sahələrimiz ---
+voyanta:
+  jwt:
+    secret: ${JWT_SECRET:change-this-in-production-min-256-bits-long}
+    access-token-ttl: 15m
+    refresh-token-ttl: 30d
+
+  ai:
+    provider: openai
+    api-key: ${AI_API_KEY:}
+    base-url: https://api.openai.com
+    model: gpt-4o          # komanda ilə dəqiqləşdir — hesabınızın çıxışı olan model
+    timeout: 15s
+    max-retries: 2
+
+  survey:
+    session-ttl: 30m
+
+  rate-limit:
+    anonymous-plans-per-day: 2
+    authenticated-plans-per-day: 5
+    ai-requests-per-minute-global: 60
+
+  storage:
+    provider: s3
+    bucket: ${STORAGE_BUCKET:voyanta-images}
+    endpoint: ${STORAGE_ENDPOINT:}          # R2 üçün doldurulur, real S3-də boş qala bilər
+    access-key: ${STORAGE_ACCESS_KEY:}
+    secret-key: ${STORAGE_SECRET_KEY:}
+    region: ${STORAGE_REGION:auto}
+
+  # Destinasiya şəkilləri. AI hər hansı yeni milli/plugins hədəf seçə bilər
+  # (Greenland, Svalbard, Faroe Islands ...), ona görə əvvəlcədən şəkil siyahısı
+  # yoxdur — ad hər dəfə API-də axtarılır və nəticə Redis-də saxlanılır.
+  # DİQQƏT: access-key YALNIZ backend-də qalır, frontend-ə heç vaxt göndərilmir.
+  unsplash:
+    access-key: ${UNSPLASH_ACCESS_KEY:}
+    base-url: https://api.unsplash.com
+    search-path: /search/photos
+    orientation: landscape
+    content-filter: high
+    per-page: 10
+    timeout: 5s
+    cache-ttl: 30d              # tapılmış şəkil — aylarla keçərlidir
+    negative-cache-ttl: 6h      # "şəkil yoxdur" nəticəsi tezliklə yenilənir
+
+  oauth:
+    google:
+      client-id: ${GOOGLE_CLIENT_ID:}
+#    apple:
+#      client-id: ${APPLE_CLIENT_ID:}
+
+  homepage:
+    avg-rating: 4.9
+    stats-cache-ttl: 1h
+
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+      - http://localhost:5173
+      - http://127.0.0.1:5173
+      - https://voyanta.online
+      - https://www.voyanta.online
+
+sentry:
+  dsn: ${SENTRY_DSN:}
+  environment: ${SPRING_PROFILES_ACTIVE:dev}
+  traces-sample-rate: 0.2
+  enabled: ${SENTRY_ENABLED:false}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    root: INFO
+    com.voyanta: DEBUG
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+
+---
+# --- dev profili: local docker-compose mühiti üçün ---
+spring:
+  config:
+    activate:
+      on-profile: dev
+voyanta:
+  rate-limit:
+    anonymous-plans-per-day: 1000
+    authenticated-plans-per-day: 1000
+logging:
+  level:
+    com.voyanta: DEBUG
+
+---
+# --- prod profili: real deployment üçün ---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: validate
+
+logging:
+  level:
+    root: WARN
+    com.voyanta: INFO
+
+sentry:
+  enabled: true

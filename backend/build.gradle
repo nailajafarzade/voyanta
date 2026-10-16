@@ -1,0 +1,113 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
+}
+
+group = 'com.voyanta'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    jjwtVersion = '0.12.6'
+}
+
+dependencies {
+    // --- Core ---
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // --- Persistence ---
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-database-postgresql'
+
+    // --- Redis (survey session, rate limiting, cache) ---
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // --- Security ---
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation "io.jsonwebtoken:jjwt-api:${jjwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-impl:${jjwtVersion}"
+    runtimeOnly "io.jsonwebtoken:jjwt-jackson:${jjwtVersion}"
+
+    // --- WebClient (AI provider, OAuth token verification) ---
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // --- Rate limiting ---
+    implementation 'com.bucket4j:bucket4j-redis:8.10.1'
+    implementation 'com.bucket4j:bucket4j-core:8.10.1'
+
+    // --- OAuth (Google/Apple ID token doğrulaması) ---
+    implementation 'com.nimbusds:oauth2-oidc-sdk:11.19.1'   // Maven Central-də ən son versiyanı yoxla
+
+    // --- Object storage (S3-compatible: AWS S3 / Cloudflare R2) ---
+    implementation platform('software.amazon.awssdk:bom:2.28.11')
+    implementation 'software.amazon.awssdk:s3'
+
+    // --- Monitoring ---
+    implementation 'io.sentry:sentry-spring-boot-starter-jakarta:7.15.0'
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // --- API docs ---
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
+
+    // --- Boilerplate reduction ---
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // --- Dev ---
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // --- Tests ---
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation platform('org.testcontainers:testcontainers-bom:1.21.4')
+    testImplementation 'org.testcontainers:junit-jupiter'
+    testImplementation 'org.testcontainers:postgresql'
+    testImplementation 'org.testcontainers:testcontainers'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+    testLogging {
+        events 'failed', 'skipped'
+        exceptionFormat 'full'
+        showStandardStreams = false
+    }
+    // Docker Engine 29 requires client API >= 1.44. Older docker-java defaults (1.32)
+    // make Testcontainers report "Could not find a valid Docker environment".
+    systemProperty 'api.version', '1.44'
+    environment 'DOCKER_API_VERSION', '1.44'
+    environment 'TESTCONTAINERS_RYUK_DISABLED', 'true'
+    environment 'TESTCONTAINERS_CHECKS_DISABLE', 'true'
+    // Docker Desktop on Windows: pin the Linux engine pipe. A Gradle daemon started
+    // without DOCKER_HOST will not inherit a later shell export.
+    if (System.getProperty('os.name').toLowerCase().contains('windows')) {
+        def dockerHost = System.getenv('DOCKER_HOST') ?: 'npipe:////./pipe/dockerDesktopLinuxEngine'
+        environment 'DOCKER_HOST', dockerHost
+        systemProperty 'DOCKER_HOST', dockerHost
+        systemProperty 'docker.host', dockerHost
+        environment 'TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE', '/var/run/docker.sock'
+    }
+}
